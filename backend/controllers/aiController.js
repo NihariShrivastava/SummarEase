@@ -14,22 +14,20 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 
 require('dotenv').config();
 
-const hf = new HfInference(process.env.HF_API_KEY);
+// Validate API Key immediately
+const HK_KEY = process.env.HF_API_KEY;
+if (!HK_KEY) {
+    console.error("CRITICAL ERROR: HF_API_KEY is missing in environment variables!");
+}
 
-// Lazy-load the transcriber to avoid startup delay
+const hf = new HfInference(HK_KEY);
+
 // Lazy-load the transcriber to avoid startup delay
 let transcriber = null;
 
-// Log key status for debugging
-console.log("HF_API_KEY Configured:", !!process.env.HF_API_KEY);
-if (process.env.HF_API_KEY) {
-    console.log("HF_API_KEY Length:", process.env.HF_API_KEY.length);
-    console.log("HF_API_KEY Prefix:", process.env.HF_API_KEY.substring(0, 3));
-}
-
 async function getTranscriber() {
     if (!transcriber) {
-        console.log("Loading local Whisper model... (this may take a moment on first run)");
+        console.log("Loading local Whisper model... (fallback only)");
         transcriber = await pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny.en');
     }
     return transcriber;
