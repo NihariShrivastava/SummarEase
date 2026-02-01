@@ -15,9 +15,14 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 require('dotenv').config();
 
 // Validate API Key immediately
-const HK_KEY = process.env.HF_API_KEY;
+let HK_KEY = process.env.HF_API_KEY;
+
 if (!HK_KEY) {
-    console.error("CRITICAL ERROR: HF_API_KEY is missing in environment variables!");
+    console.error("CRITICAL ERROR: HF_API_KEY is missing via process.env!");
+} else {
+    // Sanitize: Remove whitespace and quotes if user accidentally added them
+    HK_KEY = HK_KEY.trim().replace(/^["']|["']$/g, '');
+    console.log(`HF_API_KEY Loaded. Length: ${HK_KEY.length}. First 3: ${HK_KEY.substring(0, 3)}...`);
 }
 
 const hf = new HfInference(HK_KEY);
@@ -35,7 +40,7 @@ async function getTranscriber() {
 
 /**
  * Controller for Text Summarization
- * Uses Qwen (Chat) for structured Markdown output
+ * Uses Qwen (Ungated, Reliable)
  */
 exports.summarizeText = async (req, res) => {
     try {
@@ -52,7 +57,7 @@ exports.summarizeText = async (req, res) => {
         ];
 
         const chatRes = await hf.chatCompletion({
-            model: "mistralai/Mistral-7B-Instruct-v0.3",
+            model: "Qwen/Qwen2.5-7B-Instruct",
             messages: messages,
             max_tokens: 800,
             temperature: 0.7
@@ -82,7 +87,7 @@ exports.generateTable = async (req, res) => {
         ${data}`;
 
         const chatCompletion = await hf.chatCompletion({
-            model: "mistralai/Mistral-7B-Instruct-v0.3",
+            model: "Qwen/Qwen2.5-7B-Instruct",
             messages: [{ role: "user", content: prompt }],
             max_tokens: 1000
         });
@@ -136,7 +141,7 @@ exports.uploadVideo = async (req, res) => {
 
         console.log("Sending audio to HF API for transcription...");
         const asrRes = await hf.automaticSpeechRecognition({
-            model: 'openai/whisper-large-v3-turbo',
+            model: 'openai/whisper-tiny.en',
             data: audioBuffer
         });
 

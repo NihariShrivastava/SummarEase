@@ -15,12 +15,18 @@ router.post('/generate-table', aiController.generateTable);
 
 // Debug/Health Route
 router.get('/health', (req, res) => {
+    const rawKey = process.env.HF_API_KEY || '';
+    const sanitizedKey = rawKey.trim().replace(/^["']|["']$/g, '');
+
     res.json({
         status: 'ok',
         env: {
             node_version: process.version,
-            has_hf_key: !!process.env.HF_API_KEY,
-            key_length: process.env.HF_API_KEY ? process.env.HF_API_KEY.length : 0
+            has_raw_key: !!rawKey,
+            raw_key_length: rawKey.length,
+            sanitized_key_length: sanitizedKey.length,
+            starts_with_hf: sanitizedKey.startsWith('hf_'),
+            contains_quotes: rawKey.includes('"') || rawKey.includes("'")
         }
     });
 });
