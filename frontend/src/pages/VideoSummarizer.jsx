@@ -95,46 +95,54 @@ const VideoSummarizer = () => {
                     </Col>
                 </Row>
 
-                <AnimatePresence>
-                    {result && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            <Row className="g-4">
-                                <Col md={6}>
-                                    <Card className="border-0 shadow-lg h-100 rounded-4 overflow-hidden">
-                                        <Card.Header className="bg-body-tertiary border-0 py-3 px-4 d-flex align-items-center">
-                                            <FileText className="text-danger me-2" />
-                                            <h5 className="mb-0 fw-bold">Transcript</h5>
-                                        </Card.Header>
-                                        <Card.Body className="p-4">
-                                            <div className="bg-body border rounded-3 p-3" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                                                <p className="mb-0 text-muted" style={{ whiteSpace: 'pre-wrap' }}>{result.transcript}</p>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                                <Col md={6}>
-                                    <Card className="border-0 shadow-lg h-100 rounded-4 overflow-hidden">
-                                        <Card.Header className="bg-danger text-white border-0 py-3 px-4 d-flex align-items-center">
-                                            <CheckCircle className="me-2" />
-                                            <h5 className="mb-0 fw-bold">AI Summary</h5>
-                                        </Card.Header>
-                                        <Card.Body className="p-4">
-                                            <div className="p-2">
-                                                <p className="lead fs-6">{result.summary}</p>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                            </Row>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </motion.div>
-        </Container>
+            </Row>
+
+            {/* Debug Info */}
+            <div className="text-center text-muted mb-4 small opacity-75">
+                <p className="mb-1">API Endpoint: <code>{API_URL}</code></p>
+                <p>App Mode: <code>{import.meta.env.MODE}</code></p>
+            </div>
+
+            <AnimatePresence>
+                {result && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <Row className="g-4">
+                            <Col md={6}>
+                                <Card className="border-0 shadow-lg h-100 rounded-4 overflow-hidden">
+                                    <Card.Header className="bg-body-tertiary border-0 py-3 px-4 d-flex align-items-center">
+                                        <FileText className="text-danger me-2" />
+                                        <h5 className="mb-0 fw-bold">Transcript</h5>
+                                    </Card.Header>
+                                    <Card.Body className="p-4">
+                                        <div className="bg-body border rounded-3 p-3" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                                            <p className="mb-0 text-muted" style={{ whiteSpace: 'pre-wrap' }}>{result.transcript}</p>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                            <Col md={6}>
+                                <Card className="border-0 shadow-lg h-100 rounded-4 overflow-hidden">
+                                    <Card.Header className="bg-danger text-white border-0 py-3 px-4 d-flex align-items-center">
+                                        <CheckCircle className="me-2" />
+                                        <h5 className="mb-0 fw-bold">AI Summary</h5>
+                                    </Card.Header>
+                                    <Card.Body className="p-4">
+                                        <div className="p-2">
+                                            <p className="lead fs-6">{result.summary}</p>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </Row>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
+        </Container >
     );
 };
 
