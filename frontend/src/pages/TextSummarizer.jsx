@@ -29,7 +29,8 @@ const TextSummarizer = () => {
             setSummary(response.data.summary);
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.details || 'An error occurred during summarization.');
+            const errorMessage = err.response?.data?.details || err.message || 'An error occurred during summarization.';
+            setError(errorMessage + (err.response?.status ? ` (Status: ${err.response.status})` : ''));
         } finally {
             setLoading(false);
         }

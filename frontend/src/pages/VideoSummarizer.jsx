@@ -38,7 +38,8 @@ const VideoSummarizer = () => {
             setResult(response.data);
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.details || "Failed to process video. Please try again.");
+            const errorMessage = err.response?.data?.details || err.message || "Failed to process video. Please try again.";
+            setError(errorMessage + (err.response?.status ? ` (Status: ${err.response.status})` : ''));
         } finally {
             setLoading(false);
         }
