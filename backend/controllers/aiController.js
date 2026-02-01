@@ -150,7 +150,7 @@ exports.uploadVideo = async (req, res) => {
         apiKey = apiKey.trim().replace(/^["']|["']$/g, '');
 
         const response = await fetch(
-            "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo",
+            "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3-turbo",
             {
                 headers: {
                     Authorization: `Bearer ${apiKey}`,
