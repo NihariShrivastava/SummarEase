@@ -1,0 +1,16 @@
+Starting Test...
+Testing: https://api-inference.huggingface.co/models/facebook/bart-large-cnn
+FAILED [https://api-inference.huggingface.co/models/facebook/bart-large-cnn]: 410
+Error Data: {"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.huggingface.co instead."}
+-------------------
+Testing: https://router.huggingface.co/models/facebook/bart-large-cnn
+FAILED [https://router.huggingface.co/models/facebook/bart-large-cnn]: 404
+Error Data: "Not Found"
+-------------------
+Testing: https://router.huggingface.co/facebook/bart-large-cnn
+FAILED [https://router.huggingface.co/facebook/bart-large-cnn]: 404
+Error Data: "Not Found"
+-------------------
+Testing: https://router.huggingface.co/hf-inference/models/facebook/bart-large-cnn
+FAILED [https://router.huggingface.co/hf-inference/models/facebook/bart-large-cnn]: timeout of 5000ms exceeded
+-------------------

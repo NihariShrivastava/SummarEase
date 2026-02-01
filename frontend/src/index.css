@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Oswald:wght@500;700&display=swap');
+
+:root {
+  --bs-font-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
+  --accent-color: #e23636;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--bs-font-sans-serif);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography Overrides for Brutalist Look */
+h1,
+h2,
+h3,
+.navbar-brand {
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  font-weight: 700;
+}
+
+.display-1 {
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 0.9;
+}
+
+/* Dark Mode Overrides */
+[data-bs-theme="dark"] body {
+  background-color: #050505;
+  color: #ffffff;
+}
+
+[data-bs-theme="dark"] .bg-body-tertiary,
+[data-bs-theme="dark"] .bg-light {
+  background-color: #0f0f0f !important;
+  color: white !important;
+  border-color: #333 !important;
+}
+
+[data-bs-theme="dark"] .card-header.bg-white {
+  background-color: #1a1a1a !important;
+  color: white !important;
+}
+
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+  background-color: #1a1a1a;
+  border-color: #333;
+  color: #fff;
+}
+
+[data-bs-theme="dark"] .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+[data-bs-theme="dark"] .border-dashed {
+  border-color: #444 !important;
+}
+
+[data-bs-theme="dark"] .text-muted {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus {
+  background-color: #1a1a1a;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.25rem rgba(226, 54, 54, 0.25);
+  color: #fff;
+}
+
+/* Avatar Styling */
+.hero-avatar {
+  border: 4px solid #1a1a1a;
+  box-shadow: 0 0 30px rgba(226, 54, 54, 0.4);
+}
+
+.avatar-glow {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-glow::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, var(--accent-color), transparent 20%);
+  animation: rotate 4s linear infinite;
+  z-index: -1;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Custom Utilities */
+.text-accent {
+  color: var(--accent-color);
+}
+
+.bg-black {
+  background-color: #000000 !important;
+}
+
+/* Hero Background Grid */
+.bg-grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+
+[data-bs-theme="dark"] .bg-grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+/* Glassmorphism Navbar */
+.navbar-glass {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+[data-bs-theme="dark"] .navbar-glass {
+  background: rgba(10, 10, 10, 0.7) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero-glow {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(226, 54, 54, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(60px);
+  z-index: -1;
+}
+
+/* Button Styling */
+.btn-super {
+  background-color: var(--accent-color);
+  border: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 15px rgba(226, 54, 54, 0.3);
+}
+
+.btn-super:hover {
+  background-color: #ff4d4d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(226, 54, 54, 0.5);
+}
+
+/* Card Styling */
+.option-card {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-bs-theme="dark"] .option-card {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-bs-theme="light"] .option-card {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.option-card:hover {
+  border-color: var(--accent-color) !important;
+  transform: translateY(-5px);
+}
+
+/* Navigation */
+.navbar-brand span {
+  letter-spacing: -1px;
+}
+
+/* Hero Title Responsive */
+.hero-title {
+  font-size: clamp(3rem, 10vw, 6rem);
+  line-height: 1.1;
+  transition: font-size 0.3s ease;
+}
+
+/* Animations */
+@keyframes glitch {
+  0% {
+    transform: translate(0)
+  }
+
+  20% {
+    transform: translate(-2px, 2px)
+  }
+
+  40% {
+    transform: translate(-2px, -2px)
+  }
+
+  60% {
+    transform: translate(2px, 2px)
+  }
+
+  80% {
+    transform: translate(2px, -2px)
+  }
+
+  100% {
+    transform: translate(0)
+  }
+}
+
+.title-glitch:hover {
+  animation: glitch 0.5s cubic-bezier(.25, .46, .45, .94) both infinite;
+  color: var(--accent-color);
+}
