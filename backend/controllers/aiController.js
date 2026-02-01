@@ -141,7 +141,7 @@ exports.uploadVideo = async (req, res) => {
 
         console.log("Sending audio to HF API for transcription...");
         const asrRes = await hf.automaticSpeechRecognition({
-            model: 'openai/whisper-tiny.en',
+            model: 'openai/whisper-large-v3-turbo',
             data: audioBuffer
         });
 
