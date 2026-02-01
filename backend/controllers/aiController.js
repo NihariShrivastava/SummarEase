@@ -141,12 +141,32 @@ exports.uploadVideo = async (req, res) => {
         const audioBuffer = fs.readFileSync(audioPath);
 
         console.log("Sending audio to HF API for transcription...");
-        const hf = getClient(); // Instantiate here
+        console.log("Sending audio to HF API for transcription...");
+        // const hf = getClient(); 
+        // Use raw fetch to bypass specific SDK bug with file uploads/tokens
 
-        const asrRes = await hf.automaticSpeechRecognition({
-            model: 'openai/whisper-large-v3-turbo',
-            data: audioBuffer
-        });
+        let apiKey = process.env.HF_API_KEY;
+        if (!apiKey) throw new Error("HF_API_KEY missing");
+        apiKey = apiKey.trim().replace(/^["']|["']$/g, '');
+
+        const response = await fetch(
+            "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo",
+            {
+                headers: {
+                    Authorization: `Bearer ${apiKey}`,
+                    "Content-Type": "application/octet-stream",
+                },
+                method: "POST",
+                body: audioBuffer,
+            }
+        );
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HF API Error: ${response.status} ${response.statusText} - ${errorText}`);
+        }
+
+        const asrRes = await response.json();
 
         const transcript = asrRes.text;
         console.log("Transcription received:", transcript ? transcript.substring(0, 50) + "..." : "Empty");
