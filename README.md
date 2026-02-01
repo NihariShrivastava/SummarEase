@@ -169,4 +169,4 @@ This project is for educational and demonstration purposes.
 
 ---
 
-**SummarEase – Turn long content into instant clarity.** ✨
+**SummarEase – Summarize with EASE.** ✨
