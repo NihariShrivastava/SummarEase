@@ -176,6 +176,7 @@ exports.uploadVideo = async (req, res) => {
         }
 
         // 3. Summarize Transcript with Cloud BART
+        const hf = getClient(); // Need SDK client for this part
         const summaryRes = await hf.summarization({
             model: "facebook/bart-large-cnn",
             inputs: transcript,
