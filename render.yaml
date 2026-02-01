@@ -10,11 +10,12 @@ services:
         value: 10000
     autoDeploy: false
 
-  - type: static
+  - type: web
     name: summarease-frontend
-    env: static
+    env: node
+    plan: free
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
+    startCommand: cd frontend && npm run start
     envVars:
       - key: VITE_API_URL
         fromService:
