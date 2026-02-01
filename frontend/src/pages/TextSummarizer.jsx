@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Copy, RefreshCw, FileText, Sparkles, Settings2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
+import API_URL from '../config';
 
 const TextSummarizer = () => {
     const [text, setText] = useState('');
@@ -21,7 +22,7 @@ const TextSummarizer = () => {
         setError('');
 
         try {
-            const response = await axios.post('http://localhost:5000/api/summarize-text', {
+            const response = await axios.post(`${API_URL}/summarize-text`, {
                 text,
                 type: summaryType
             });

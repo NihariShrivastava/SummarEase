@@ -3,8 +3,10 @@ import { Container, Row, Col, Card, Form, Button, Spinner, Alert } from 'react-b
 import axios from 'axios';
 import { Upload, FileVideo, FileText, CheckCircle, Video } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import API_URL from '../config';
 
 const VideoSummarizer = () => {
+    // ... (keep existing state)
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState(null);
@@ -30,7 +32,7 @@ const VideoSummarizer = () => {
         formData.append('video', file);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/upload-video', formData, {
+            const response = await axios.post(`${API_URL}/upload-video`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             setResult(response.data);

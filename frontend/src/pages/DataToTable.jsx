@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Form, Button, Table, Spinner, Alert } from '
 import axios from 'axios';
 import { Database, Table as TableIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import API_URL from '../config';
 
 const DataToTable = () => {
     const [dataInput, setDataInput] = useState('');
@@ -19,7 +20,7 @@ const DataToTable = () => {
         setTableData(null);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/generate-table', {
+            const response = await axios.post(`${API_URL}/generate-table`, {
                 data: dataInput
             });
             if (Array.isArray(response.data.table)) {
