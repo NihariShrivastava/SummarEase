@@ -11,7 +11,13 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*', // Allow all or specific frontend
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    // Allow all origins (INSECURE: FOR DEBUGGING ONLY)
+    // For production, you should validate against a whitelist
+    return callback(null, true);
+  },
   credentials: true
 }));
 app.use(express.json());
