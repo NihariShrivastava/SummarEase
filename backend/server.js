@@ -10,16 +10,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    // Allow all origins (INSECURE: FOR DEBUGGING ONLY)
-    // For production, you should validate against a whitelist
-    return callback(null, true);
-  },
-  credentials: true
-}));
+// Middleware
+app.use(cors()); // Allow all origins (simplest fix for Network Error)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
