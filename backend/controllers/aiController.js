@@ -17,7 +17,16 @@ require('dotenv').config();
 const hf = new HfInference(process.env.HF_API_KEY);
 
 // Lazy-load the transcriber to avoid startup delay
+// Lazy-load the transcriber to avoid startup delay
 let transcriber = null;
+
+// Log key status for debugging
+console.log("HF_API_KEY Configured:", !!process.env.HF_API_KEY);
+if (process.env.HF_API_KEY) {
+    console.log("HF_API_KEY Length:", process.env.HF_API_KEY.length);
+    console.log("HF_API_KEY Prefix:", process.env.HF_API_KEY.substring(0, 3));
+}
+
 async function getTranscriber() {
     if (!transcriber) {
         console.log("Loading local Whisper model... (this may take a moment on first run)");
@@ -45,7 +54,7 @@ exports.summarizeText = async (req, res) => {
         ];
 
         const chatRes = await hf.chatCompletion({
-            model: "Qwen/Qwen2.5-7B-Instruct",
+            model: "mistralai/Mistral-7B-Instruct-v0.3",
             messages: messages,
             max_tokens: 800,
             temperature: 0.7
@@ -75,7 +84,7 @@ exports.generateTable = async (req, res) => {
         ${data}`;
 
         const chatCompletion = await hf.chatCompletion({
-            model: "Qwen/Qwen2.5-7B-Instruct",
+            model: "mistralai/Mistral-7B-Instruct-v0.3",
             messages: [{ role: "user", content: prompt }],
             max_tokens: 1000
         });
@@ -129,7 +138,7 @@ exports.uploadVideo = async (req, res) => {
 
         console.log("Sending audio to HF API for transcription...");
         const asrRes = await hf.automaticSpeechRecognition({
-            model: 'openai/whisper-tiny.en',
+            model: 'openai/whisper-large-v3-turbo',
             data: audioBuffer
         });
 
