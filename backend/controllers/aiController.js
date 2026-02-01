@@ -52,10 +52,10 @@ exports.summarizeText = async (req, res) => {
         });
 
         res.json({ summary: chatRes.choices[0].message.content });
-
     } catch (error) {
         console.error("HF Text Summary Error:", error);
-        res.status(500).json({ error: "Failed to summarize text", details: error.message });
+        console.error("HF Text Summary Error (JSON):", JSON.stringify(error, null, 2)); // Log full object
+        res.status(500).json({ error: "Failed to summarize text", details: error.message || JSON.stringify(error) });
     }
 };
 
@@ -124,33 +124,20 @@ exports.uploadVideo = async (req, res) => {
                 .save(audioPath);
         });
 
-        // 2. Transcribe Locally
-        // Load the model
-        const pipe = await getTranscriber();
+        // 2. Transcribe with HuggingFace API (Remote) to save memory
+        const audioBuffer = fs.readFileSync(audioPath);
 
-        // Read the WAV file buffer
-        const buffer = fs.readFileSync(audioPath);
+        console.log("Sending audio to HF API for transcription...");
+        const asrRes = await hf.automaticSpeechRecognition({
+            model: 'openai/whisper-tiny.en',
+            data: audioBuffer
+        });
 
-        // Parse the WAV file
-        const wav = new wavefile.WaveFile(buffer);
-        wav.toBitDepth('32f'); // Convert to 32-bit float
-        const audioData = wav.getSamples();
-
-        // If stereo, getSamples returns 2 channels. We need mono. 
-        // But we forced ffmpeg to mono (audioChannels(1)), so audioData should be a Float64Array (or similar) of samples
-        // Check if it's an array of arrays (multi-channel) or single array
-        let rawAudio = audioData;
-        if (Array.isArray(audioData)) {
-            // If multiple channels, take the first one
-            rawAudio = audioData[0];
-        }
-
-        // Run inference with the raw audio object
-        const output = await pipe(rawAudio);
-        const transcript = output.text;
+        const transcript = asrRes.text;
+        console.log("Transcription received:", transcript ? transcript.substring(0, 50) + "..." : "Empty");
 
         if (!transcript || transcript.trim().length === 0) {
-            throw new Error("Transcription yielded empty result.");
+            throw new Error("Transcription yielded empty result from API.");
         }
 
         // 3. Summarize Transcript with Cloud BART
