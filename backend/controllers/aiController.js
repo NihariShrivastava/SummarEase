@@ -14,18 +14,16 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 
 require('dotenv').config();
 
-// Validate API Key immediately
-let HK_KEY = process.env.HF_API_KEY;
+// Remove global initialization to prevent startup race conditions or stale env vars
+// const hf = new HfInference(process.env.HF_API_KEY);
 
-if (!HK_KEY) {
-    console.error("CRITICAL ERROR: HF_API_KEY is missing via process.env!");
-} else {
-    // Sanitize: Remove whitespace and quotes if user accidentally added them
-    HK_KEY = HK_KEY.trim().replace(/^["']|["']$/g, '');
-    console.log(`HF_API_KEY Loaded. Length: ${HK_KEY.length}. First 3: ${HK_KEY.substring(0, 3)}...`);
+// Helper to get authenticated client per request
+function getClient() {
+    let key = process.env.HF_API_KEY;
+    if (!key) throw new Error("HF_API_KEY is missing via process.env");
+    key = key.trim().replace(/^["']|["']$/g, '');
+    return new HfInference(key);
 }
-
-const hf = new HfInference(HK_KEY);
 
 // Lazy-load the transcriber to avoid startup delay
 let transcriber = null;
@@ -46,6 +44,8 @@ exports.summarizeText = async (req, res) => {
     try {
         const { text, type } = req.body;
         if (!text) return res.status(400).json({ error: "Text is required" });
+
+        const hf = getClient(); // Instantiate here
 
         const instruction = type === 'short'
             ? "Provide a concise summary in bullet points (Markdown)."
@@ -79,6 +79,8 @@ exports.generateTable = async (req, res) => {
     try {
         const { data } = req.body;
         if (!data) return res.status(400).json({ error: "Data is required" });
+
+        const hf = getClient(); // Instantiate here
 
         const prompt = `You are a data formatting assistant. Convert the following unstructured text into a valid JSON array of objects. 
         Ensure all objects have the same keys. Do not include any markdown formatting (like \`\`\`json), just return the raw JSON.
@@ -115,8 +117,7 @@ exports.generateTable = async (req, res) => {
 
 /**
  * Controller for Video Upload
- * Uses Local Whisper (Xenova) for Transcription + Cloud BART for Summary
- * Hybrid approach for maximum reliability on free tier.
+ * Uses Cloud Whisper (Safe Model)
  */
 exports.uploadVideo = async (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'No video file uploaded' });
@@ -140,6 +141,8 @@ exports.uploadVideo = async (req, res) => {
         const audioBuffer = fs.readFileSync(audioPath);
 
         console.log("Sending audio to HF API for transcription...");
+        const hf = getClient(); // Instantiate here
+
         const asrRes = await hf.automaticSpeechRecognition({
             model: 'openai/whisper-large-v3-turbo',
             data: audioBuffer
