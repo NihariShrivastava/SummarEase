@@ -154,7 +154,7 @@ exports.uploadVideo = async (req, res) => {
             {
                 headers: {
                     Authorization: `Bearer ${apiKey}`,
-                    "Content-Type": "application/octet-stream",
+                    "Content-Type": "audio/wav",
                 },
                 method: "POST",
                 body: audioBuffer,
