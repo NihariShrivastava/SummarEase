@@ -110,7 +110,7 @@ exports.uploadVideo = async (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'No video file uploaded' });
 
     const videoPath = req.file.path;
-    const audioPath = path.join('uploads', `${req.file.filename}.wav`);
+    const audioPath = path.join(path.dirname(videoPath), `${req.file.filename}.wav`);
 
     try {
         // 1. Extract Audio using ffmpeg -> WAV 16kHz Mono (Required for Xenova)
