@@ -95,11 +95,6 @@ const VideoSummarizer = () => {
                     </Col>
                 </Row>
 
-                {/* Debug Info */}
-                <div className="text-center text-muted mb-4 small opacity-75">
-                    <p className="mb-1">API Endpoint: <code>{API_URL}</code></p>
-                    <p>App Mode: <code>{import.meta.env.MODE}</code></p>
-                </div>
 
                 <AnimatePresence>
                     {result && (
